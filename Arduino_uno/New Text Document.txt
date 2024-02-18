@@ -1,0 +1,109 @@
+#include <Wire.h>
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+const int switchPin1 = 6; // Use pin 4 for switchPin1
+const int switchPin2 = 7; // Use pin 3 for switchPin2
+const int switchPin3 = 8; // Use pin 6 for switchPin3
+
+const int ledPin1 = 9;
+// const int ledPin2 = 8; // You can comment this line out, as you're not using it
+
+bool switch1Pressed = false;
+bool switch2Pressed = false;
+bool switch3Pressed = false;
+
+void setup() {
+  lcd.begin(16, 2);
+//  lcd.backlight();
+  pinMode(switchPin1, INPUT_PULLUP);
+  pinMode(switchPin2, INPUT_PULLUP);
+  pinMode(switchPin3, INPUT_PULLUP);
+  pinMode(ledPin1, OUTPUT);
+  // pinMode(ledPin2, OUTPUT); // You can comment this line out
+  lcd.setCursor(0, 0);
+  lcd.print("MOTOR ON"); // Display "MOTOR ON" at startup
+}
+
+void loop() {
+  int switchState1 = digitalRead(switchPin1);
+  int switchState2 = digitalRead(switchPin2);
+  int switchState3 = digitalRead(switchPin3);
+
+  if (switchState1 == LOW) {
+    if (!switch1Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR  ON");
+      digitalWrite(ledPin1, HIGH); // Turn on LED1
+      switch1Pressed = true;
+      // Add any other necessary actions here
+    }
+  } else {
+    if (switch1Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR OFF");
+      digitalWrite(ledPin1, LOW); // Turn off LED1
+      switch1Pressed = false;
+      // Add any other necessary actions here
+    }
+  }
+
+  if (switchState2 == LOW) {
+    if (!switch2Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR OFF PLEASE");
+      lcd.setCursor(0, 1);
+      lcd.print("CLEAN THE BOTTLE");
+      // digitalWrite(ledPin2, HIGH); // Turn on LED2
+      digitalWrite(ledPin1, LOW); // Turn off LED1
+      switch2Pressed = true;
+//      switch1Pressed = false;
+      // Add any other necessary actions here
+    }
+  } else {
+    if (switch2Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR OFF                ");
+      lcd.setCursor(0, 1);
+      lcd.print("                       ");
+      digitalWrite(ledPin1, LOW); // Turn off LED2
+      switch2Pressed = false;
+      // Add any other necessary actions here
+    }
+  }
+
+  if (switchState3 == LOW) {
+    if (!switch3Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR OFF              ");
+      lcd.setCursor(0, 1);
+      lcd.print("               ");
+      // Add any other necessary actions here
+      switch3Pressed = true;
+    }
+  } else {
+    if (switch3Pressed) {
+      lcd.setCursor(0, 0);
+      lcd.print("MOTOR OFF BOTTLE");
+      lcd.setCursor(0, 1);
+      lcd.print("SENSOR IS OPEN ");
+      digitalWrite(ledPin1, LOW); // Turn off LED1
+      // Add any other necessary actions here
+      switch3Pressed = false;
+    }
+  }
+  if (switchState1 == LOW && switchState2 == LOW) {
+    // Turn off LED1
+    lcd.setCursor(0, 0);
+    lcd.print("MOTOR OFF");
+    digitalWrite(ledPin1, LOW);
+    // Add any other necessary actions here
+  }
+//
+
+  
+
+  // Rest of your code for handling switches and LEDs as before
+  // ...
+}
